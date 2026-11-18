@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNSTUCK — Student Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15100c;
+    --ink2:#1c150f;
+    --surface:#251c15;
+    --surface-2:#2e2319;
+    --ivory:#f4ecdb;
+    --ivory-dim:#cabb9e;
+    --brass:#c99a4d;
+    --brass-light:#e6c07f;
+    --wine:#7c2a37;
+    --wine-light:#a8394a;
+    --line: rgba(244,236,219,0.12);
+    --shadow: 0 20px 50px rgba(0,0,0,0.45);
+  }
+ 
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Montserrat', sans-serif;
+    background:var(--ink);
+    color:var(--ivory);
+    line-height:1.1;
+    font-weight:400;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+ 
+  .wrap{ max-width:1160px; margin:0 auto; padding:0 24px; }
+  section{ position:relative; padding:96px 0; }
+ 
+  h1,h2,h3,h4{ font-weight:800; line-height:1.1; letter-spacing:-0.01em; text-align:center; }
+  p{ text-align:justify; color:var(--ivory-dim); line-height:1.1; }
+ 
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    font-size:12px; font-weight:700; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--brass-light);
+    margin-bottom:18px; justify-content:center; width:100%; text-align:center;
+  }
+  .eyebrow::before,.eyebrow::after{ content:''; height:1px; width:26px; background:var(--brass); opacity:0.6; }
+ 
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:18px 34px;
+    background:linear-gradient(135deg, var(--brass-light), var(--brass));
+    color:var(--ink); font-weight:800; font-size:14px; letter-spacing:0.06em;
+    text-transform:uppercase; border:none; border-radius:2px; cursor:pointer;
+    box-shadow:0 12px 30px rgba(201,154,77,0.28);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 16px 36px rgba(201,154,77,0.4); }
+  .btn .arrow{ transition:transform .25s ease; }
+  .btn:hover .arrow{ transform:translateX(4px); }
+  .btn-ghost{ background:transparent; color:var(--ivory); border:1px solid var(--line); box-shadow:none; }
+  .btn-ghost:hover{ border-color:var(--brass); box-shadow:none; }
+ 
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(21,16,12,0.75); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1160px; margin:0 auto; }
+  .logo{ font-weight:900; font-size:19px; letter-spacing:0.02em; display:flex; align-items:center; gap:10px; }
+  .logo .mark{
+    width:22px; height:22px; border-radius:5px;
+    background:linear-gradient(135deg, var(--brass-light), var(--brass));
+    display:flex; align-items:center; justify-content:center;
+    color:var(--ink); font-size:13px; font-weight:900;
+  }
+  .nav-links{ display:flex; gap:32px; font-size:13px; font-weight:600; letter-spacing:0.03em; text-transform:uppercase; color:var(--ivory-dim); }
+  .nav-links a:hover{ color:var(--brass-light); }
+  .nav .btn{ padding:12px 22px; font-size:12px; }
+  @media (max-width: 860px){ .nav-links{ display:none; } }
+ 
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:170px 0 90px;
+    background:
+      radial-gradient(ellipse 90% 60% at 50% 0%, rgba(124,42,55,0.35), transparent 60%),
+      linear-gradient(180deg, var(--ink) 0%, var(--ink2) 100%);
+    overflow:hidden;
+  }
+  .hero .wrap{ display:flex; flex-direction:column; align-items:center; text-align:center; }
+  .hero h1{ font-size:clamp(30px, 5.4vw, 58px); max-width:920px; text-transform:uppercase; }
+  .hero .lede{
+    max-width:640px; margin:26px auto 0; font-size:clamp(16px,2vw,19px);
+    text-align:center; color:var(--ivory-dim); line-height:1.5;
+  }
+  .hero .cta-row{ margin-top:40px; display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+  .hero .micro{ margin-top:18px; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--ivory-dim); opacity:0.7; }
+ 
+  /* chat mockup — hero signature */
+  .chatcard{
+    margin-top:68px; width:100%; max-width:560px;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:10px;
+    box-shadow:var(--shadow); overflow:hidden; text-align:left;
+  }
+  .chatcard-head{
+    display:flex; align-items:center; gap:10px; padding:14px 18px;
+    border-bottom:1px solid var(--line); background:var(--ink2);
+  }
+  .chatcard-head .dots{ display:flex; gap:6px; }
+  .chatcard-head .dots span{ width:9px; height:9px; border-radius:50%; background:rgba(244,236,219,0.18); }
+  .chatcard-head .title{ font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--ivory-dim); margin-left:4px; }
+  .chatcard-body{ padding:22px 20px; display:flex; flex-direction:column; gap:14px; }
+  .bubble{
+    max-width:86%; padding:13px 16px; border-radius:10px; font-size:14px; line-height:1.4;
+    opacity:0; transform:translateY(10px); animation:bubbleIn .5s ease forwards;
+  }
+  .bubble.user{
+    align-self:flex-end; background:var(--wine); color:#f5dde1; border-bottom-right-radius:2px;
+    animation-delay:.2s;
+  }
+  .bubble.ai{
+    align-self:flex-start; background:var(--ink); border:1px solid var(--line); color:var(--ivory);
+    border-bottom-left-radius:2px; animation-delay:.9s;
+  }
+  .bubble.user2{ align-self:flex-end; background:var(--wine); color:#f5dde1; border-bottom-right-radius:2px; animation-delay:1.6s; }
+  .bubble.ai2{ align-self:flex-start; background:var(--ink); border:1px solid var(--brass); color:var(--brass-light); border-bottom-left-radius:2px; font-weight:600; animation-delay:2.1s; }
+  @keyframes bubbleIn{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .bubble{ animation:none; opacity:1; transform:none; } }
+ 
+  /* ---------- PAIN POINTS ---------- */
+  .pain{ background:var(--surface); }
+  .quote-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:16px; margin-top:56px; }
+  .quote{ background:var(--surface-2); border-left:3px solid var(--wine-light); padding:24px 26px; border-radius:2px; }
+  .quote p{ color:var(--ivory); font-style:italic; text-align:left; font-size:15.5px; }
+  .pain .lead-out{ max-width:720px; margin:56px auto 0; text-align:center; font-size:17px; color:var(--ivory); }
+  .pain .lead-out strong{ color:var(--brass-light); }
+  @media (max-width:720px){ .quote-grid{ grid-template-columns:1fr; } }
+ 
+  /* ---------- METHOD / ROADMAP ---------- */
+  .roadmap{ background:var(--ink); }
+  .roadmap-track{
+    margin-top:70px; display:flex; align-items:center; justify-content:center;
+    gap:0; position:relative; max-width:1000px; margin-left:auto; margin-right:auto; flex-wrap:wrap;
+  }
+  .rkey{
+    width:150px; background:var(--ink2); border:1px solid var(--line);
+    padding:26px 14px; text-align:center; color:var(--ivory); position:relative;
+    box-shadow:0 10px 24px rgba(0,0,0,0.3); border-radius:6px; transition:transform .3s ease, border-color .3s ease;
+  }
+  .rkey:hover{ transform:translateY(-8px); border-color:var(--brass); }
+  .rkey .num{
+    display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
+    width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg, var(--brass-light), var(--brass));
+    color:var(--ink); font-weight:900; font-size:13px;
+  }
+  .rkey .label{ font-weight:700; font-size:13.5px; line-height:1.25; text-align:center; }
+  .rk-arrow{ color:var(--brass); font-size:20px; padding:0 6px; opacity:0.6; }
+  @media (max-width:900px){
+    .roadmap-track{ flex-direction:column; gap:10px; }
+    .rk-arrow{ transform:rotate(90deg); padding:2px 0; }
+    .rkey{ width:240px; }
+  }
+ 
+  /* ---------- WHAT'S INSIDE ---------- */
+  .curriculum{ background:var(--surface); }
+  .curr-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:20px; margin-top:60px; }
+  .curr-card{ background:var(--ink2); border:1px solid var(--line); border-radius:4px; padding:28px 24px; transition:border-color .25s ease, transform .25s ease; }
+  .curr-card:hover{ border-color:var(--brass); transform:translateY(-4px); }
+  .curr-card .tag{ font-size:11px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:var(--brass-light); margin-bottom:14px; display:block; }
+  .curr-card h4{ text-align:left; font-size:17px; margin-bottom:14px; line-height:1.25; }
+  .curr-card ul{ display:flex; flex-direction:column; gap:9px; }
+  .curr-card li{ font-size:13.5px; color:var(--ivory-dim); padding-left:18px; position:relative; text-align:left; line-height:1.35; }
+  .curr-card li::before{ content:''; position:absolute; left:0; top:6px; width:6px; height:1px; background:var(--brass); }
+  @media (max-width:900px){ .curr-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .curr-grid{ grid-template-columns:1fr; } }
+ 
+  /* ---------- BANNER ---------- */
+  .banner{ background:linear-gradient(135deg, var(--wine), #4a1620); text-align:center; }
+  .banner h2{ font-size:clamp(24px,4vw,38px); }
+  .banner p{ max-width:640px; margin:20px auto 0; text-align:center; color:#e9d3d7; font-size:16px; line-height:1.5; }
+ 
+  /* ---------- HOW IT WORKS / POSITIONING ---------- */
+  .instructor{ background:var(--ink); }
+  .instructor-grid{ display:grid; grid-template-columns:280px 1fr; gap:56px; align-items:center; margin-top:56px; }
+  .instructor-photo{
+    aspect-ratio:1/1.1; border-radius:4px;
+    background:linear-gradient(160deg, var(--surface-2), var(--ink2));
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    position:relative; overflow:hidden; padding:26px; text-align:center;
+  }
+  .instructor-photo .big-q{ font-size:19px; font-weight:800; color:var(--brass-light); line-height:1.3; }
+  .instructor-copy h3{ text-align:left; font-size:26px; margin-bottom:6px; }
+  .instructor-copy .role{ color:var(--brass-light); font-weight:600; font-size:13px; letter-spacing:0.06em; text-transform:uppercase; margin-bottom:22px; display:block; }
+  .instructor-copy p{ text-align:justify; margin-bottom:16px; line-height:1.5; }
+  .credentials{ margin-top:20px; display:flex; flex-direction:column; gap:12px; }
+  .credentials li{ font-size:14.5px; color:var(--ivory-dim); padding-left:22px; position:relative; text-align:left; line-height:1.4; }
+  .credentials li.no::before{ content:'✕'; position:absolute; left:0; top:0; color:var(--wine-light); font-weight:900; font-size:12px; }
+  .credentials li.yes::before{ content:'✓'; position:absolute; left:0; top:0; color:var(--brass); font-weight:900; font-size:12px; }
+  @media (max-width:800px){
+    .instructor-grid{ grid-template-columns:1fr; }
+    .instructor-photo{ max-width:280px; margin:0 auto; }
+  }
+ 
+  /* ---------- WHO IT'S FOR ---------- */
+  .audience{ background:var(--surface); }
+  .aud-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-top:56px; }
+  .aud-card{ background:var(--ink2); border:1px solid var(--line); padding:26px 20px; text-align:center; border-radius:4px; }
+  .aud-card h4{ font-size:14.5px; margin-bottom:8px; line-height:1.25; }
+  .aud-card p{ font-size:12.5px; text-align:center; color:var(--ivory-dim); line-height:1.35; }
+  @media (max-width:900px){ .aud-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:520px){ .aud-grid{ grid-template-columns:1fr; } }
+ 
+  /* ---------- WHAT YOU GET ---------- */
+  .included{ background:var(--ink); }
+  .inc-grid{ display:grid; grid-template-columns:repeat(2, 1fr); gap:14px 30px; max-width:760px; margin:56px auto 0; }
+  .inc-item{ display:flex; align-items:center; gap:14px; padding:14px 4px; border-bottom:1px solid var(--line); }
+  .inc-item .check{
+    width:22px; height:22px; flex-shrink:0; border-radius:50%; background:var(--brass); color:var(--ink);
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:900;
+  }
+  .inc-item span.txt{ font-size:14px; font-weight:600; }
+  @media (max-width:640px){ .inc-grid{ grid-template-columns:1fr; } }
+ 
+  /* ---------- PRICING ---------- */
+  .pricing{
+    background:radial-gradient(ellipse 80% 60% at 50% 100%, rgba(201,154,77,0.14), transparent 60%), var(--surface);
+    text-align:center;
+  }
+  .price-card{
+    max-width:460px; margin:56px auto 0; background:var(--ink2); border:1px solid var(--brass);
+    border-radius:6px; padding:44px 36px; box-shadow:0 30px 60px rgba(0,0,0,0.5); position:relative;
+  }
+  .price-card .slots{
+    display:inline-block; background:var(--wine); color:#f6dde1; font-size:11px; font-weight:800;
+    letter-spacing:0.08em; text-transform:uppercase; padding:7px 14px; border-radius:20px; margin-bottom:24px;
+  }
+  .price-card .amount{ font-size:52px; font-weight:900; color:var(--brass-light); line-height:1; }
+  .price-card .amount sup{ font-size:20px; top:-1.4em; }
+  .price-card .amount-note{ font-size:13px; color:var(--ivory-dim); margin-top:10px; text-align:center; }
+  .price-card ul{ margin:28px 0 32px; display:flex; flex-direction:column; gap:10px; text-align:left; }
+  .price-card li{ font-size:14px; color:var(--ivory-dim); padding-left:22px; position:relative; }
+  .price-card li::before{ content:'✓'; position:absolute; left:0; top:0; color:var(--brass); font-weight:900; }
+  .price-card .btn{ width:100%; }
+ 
+  /* ---------- FAQ ---------- */
+  .faq{ background:var(--ink); }
+  .faq-list{ max-width:720px; margin:56px auto 0; display:flex; flex-direction:column; gap:12px; }
+  details{ background:var(--surface); border:1px solid var(--line); border-radius:4px; padding:20px 24px; transition:border-color .2s ease; }
+  details[open]{ border-color:var(--brass); }
+  summary{ cursor:pointer; font-weight:700; font-size:15.5px; list-style:none; display:flex; align-items:center; justify-content:space-between; text-align:left; }
+  summary::-webkit-details-marker{ display:none; }
+  summary::after{ content:'+'; font-size:22px; color:var(--brass); margin-left:16px; transition:transform .25s ease; flex-shrink:0; }
+  details[open] summary::after{ transform:rotate(45deg); }
+  details p{ margin-top:14px; text-align:left; font-size:14.5px; color:var(--ivory-dim); line-height:1.5; }
+ 
+  /* ---------- FINAL CTA ---------- */
+  .final{ background:linear-gradient(160deg, var(--ink2), var(--ink) 60%); text-align:center; padding:110px 0; }
+  .final h2{ font-size:clamp(26px,4.6vw,44px); max-width:780px; margin:0 auto; }
+  .final .cta-row{ margin-top:36px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
+ 
+  footer{ padding:36px 0; text-align:center; border-top:1px solid var(--line); font-size:12.5px; color:var(--ivory-dim); letter-spacing:0.03em; }
+ 
+  .sticky-cta{
+    position:fixed; bottom:0; left:0; right:0; z-index:90;
+    background:rgba(21,16,12,0.92); backdrop-filter:blur(10px); border-top:1px solid var(--line);
+    padding:12px 16px; display:none; align-items:center; justify-content:space-between; gap:12px;
+  }
+  .sticky-cta .price{ font-weight:800; font-size:15px; color:var(--brass-light); }
+  .sticky-cta .btn{ padding:12px 20px; font-size:12px; }
+  @media (max-width:720px){ .sticky-cta{ display:flex; } body{ padding-bottom:70px; } }
+ 
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+ 
+  @media (max-width:900px){ section{ padding:70px 0; } }
+ 
+  /* ---------- PAYMENT MODAL ---------- */
+  .pay-overlay{
+    position:fixed; inset:0; z-index:200;
+    background:rgba(10,7,5,0.72);
+    backdrop-filter:blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .pay-overlay.open{ display:flex; }
+  .pay-modal{
+    width:100%; max-width:420px;
+    background:var(--ink2);
+    border:1px solid var(--brass);
+    border-radius:8px;
+    padding:36px 30px 30px;
+    box-shadow:0 30px 70px rgba(0,0,0,0.6);
+    position:relative;
+    animation:modalIn .3s ease;
+  }
+  @keyframes modalIn{ from{ opacity:0; transform:translateY(14px) scale(0.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
+  .pay-close{
+    position:absolute; top:14px; right:16px;
+    background:none; border:none; color:var(--ivory-dim);
+    font-size:20px; cursor:pointer; line-height:1;
+    padding:4px;
+  }
+  .pay-close:hover{ color:var(--brass-light); }
+  .pay-modal h3{ font-size:20px; text-align:left; margin-bottom:6px; }
+  .pay-modal .sub{ font-size:13px; color:var(--ivory-dim); text-align:left; margin-bottom:24px; line-height:1.4; }
+  .pay-field{ margin-bottom:16px; text-align:left; }
+  .pay-field label{
+    display:block; font-size:11px; font-weight:700; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--brass-light); margin-bottom:8px;
+  }
+  .pay-field input{
+    width:100%; padding:13px 14px; background:var(--ink);
+    border:1px solid var(--line); border-radius:3px;
+    color:var(--ivory); font-family:'Montserrat', sans-serif; font-size:14px;
+  }
+  .pay-field input:focus{ outline:none; border-color:var(--brass); }
+  .pay-amount-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    margin:20px 0 24px;
+  }
+  .pay-amount-row .label{ font-size:13px; color:var(--ivory-dim); text-transform:uppercase; letter-spacing:0.05em; }
+  .pay-amount-row .amt{ font-size:20px; font-weight:900; color:var(--brass-light); }
+  .pay-modal .btn{ width:100%; }
+  .pay-error{ font-size:12.5px; color:var(--wine-light); margin-top:-6px; margin-bottom:14px; text-align:left; display:none; }
+  .pay-error.show{ display:block; }
+</style>
+</head>
+<body>
+ 
+<header>
+  <nav class="nav">
+    <div class="logo"><span class="mark">U</span>UNSTUCK</div>
+    <div class="nav-links">
+      <a href="#method">How It Works</a>
+      <a href="#inside">What's Inside</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <button type="button" class="btn" onclick="openPaymentModal()">Get UNSTUCK</button>
+  </nav>
+</header>
+ 
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">UNSTUCK · Student Edition</div>
+    <h1>Stop Staring At Your To-Do List. Start With One Small Action.</h1>
+    <p class="lede">UNSTUCK is an AI-powered productivity system for students who feel overwhelmed, stuck, or unsure where to start. It helps you break confusing or overwhelming tasks into one clear, manageable action at a time.</p>
+    <div class="cta-row">
+      <button type="button" class="btn" onclick="openPaymentModal()">Get UNSTUCK Now <span class="arrow">→</span></button>
+      <a href="#method" class="btn btn-ghost">See How It Works</a>
+    </div>
+    <div class="micro">Digital PDF + AI Prompt System &nbsp;·&nbsp; Works With Claude &nbsp;·&nbsp; $9 To Start</div>
+ 
+    <div class="chatcard">
+      <div class="chatcard-head">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="title">UNSTUCK · In Action</div>
+      </div>
+      <div class="chatcard-body">
+        <div class="bubble user">I have an assignment due in two days and I haven't started.</div>
+        <div class="bubble ai">Open the assignment instructions and find the first sentence describing what you need to submit. Don't do anything else.</div>
+        <div class="bubble user2">DONE.</div>
+        <div class="bubble ai2">Paste that sentence here. →</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PAIN POINTS -->
+<section class="pain">
+  <div class="wrap">
+    <div class="eyebrow">Sound Familiar?</div>
+    <h2 class="reveal">Have You Ever Said Any Of These?</h2>
+    <div class="quote-grid">
+      <div class="quote reveal"><p>"I don't know where to start."</p></div>
+      <div class="quote reveal"><p>"I have so much to do."</p></div>
+      <div class="quote reveal"><p>"I'll do it later."</p></div>
+      <div class="quote reveal"><p>"I don't understand the assignment."</p></div>
+      <div class="quote reveal"><p>"This feels like too much."</p></div>
+      <div class="quote reveal"><p>"I keep avoiding my CV."</p></div>
+    </div>
+    <p class="lead-out reveal">A student can know they have something important to do but still feel unable to start because the task feels too large, confusing, or overwhelming. <strong>UNSTUCK turns "I have no idea where to start" into "here's the one thing I should do next."</strong></p>
+  </div>
+</section>
+ 
+<!-- METHOD -->
+<section class="roadmap" id="method">
+  <div class="wrap">
+    <div class="eyebrow">The UNSTUCK Method</div>
+    <h2 class="reveal">One Method. One Action At A Time.</h2>
+    <p style="max-width:600px;margin:20px auto 0;text-align:center;">Instead of a giant checklist, UNSTUCK repeatedly asks one question: what is the smallest useful action you can realistically take right now?</p>
+    <div class="roadmap-track">
+      <div class="rkey reveal"><span class="num">1</span><span class="label">Understand</span></div>
+      <span class="rk-arrow">→</span>
+      <div class="rkey reveal"><span class="num">2</span><span class="label">Prioritize</span></div>
+      <span class="rk-arrow">→</span>
+      <div class="rkey reveal"><span class="num">3</span><span class="label">Break Down</span></div>
+      <span class="rk-arrow">→</span>
+      <div class="rkey reveal"><span class="num">4</span><span class="label">One Action</span></div>
+      <span class="rk-arrow">→</span>
+      <div class="rkey reveal"><span class="num">5</span><span class="label">Done</span></div>
+      <span class="rk-arrow">→</span>
+      <div class="rkey reveal"><span class="num">6</span><span class="label">Next Action</span></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- WHAT'S INSIDE -->
+<section class="curriculum" id="inside">
+  <div class="wrap">
+    <div class="eyebrow">Inside The PDF</div>
+    <h2 class="reveal">What's Inside UNSTUCK</h2>
+    <p style="max-width:640px;margin:20px auto 0;text-align:center;">One digital PDF containing everything you need to turn overwhelm into a clear next step.</p>
+    <div class="curr-grid">
+      <div class="curr-card reveal">
+        <span class="tag">01 · Guide</span>
+        <h4>Quick-Start Guide</h4>
+        <ul>
+          <li>How to start using UNSTUCK</li>
+          <li>How to give it a task</li>
+          <li>How the one-action system works</li>
+          <li>What to do when an action feels too hard</li>
+        </ul>
+      </div>
+      <div class="curr-card reveal">
+        <span class="tag">02 · Core System</span>
+        <h4>UNSTUCK Master Prompt</h4>
+        <ul>
+          <li>Prioritizing tasks</li>
+          <li>Breaking down assignments</li>
+          <li>Exam preparation & procrastination</li>
+          <li>CV / job applications & perfectionism</li>
+        </ul>
+      </div>
+      <div class="curr-card reveal">
+        <span class="tag">03 · Shortcuts</span>
+        <h4>7 Ready-to-Use Prompts</h4>
+        <ul>
+          <li>Assignment Rescue · Exam Rescue</li>
+          <li>CV & Job Application</li>
+          <li>Too Many Things · I Can't Start</li>
+          <li>Procrastination Reset · I Don't Understand</li>
+        </ul>
+      </div>
+      <div class="curr-card reveal">
+        <span class="tag">04 · Practice</span>
+        <h4>7-Day UNSTUCK Challenge</h4>
+        <ul>
+          <li>Clear your head · Beat the starting problem</li>
+          <li>Break down the big thing</li>
+          <li>Deal with confusion · Do the avoided thing</li>
+          <li>Practice the DONE loop · Build your own rule</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- BANNER -->
+<section class="banner">
+  <div class="wrap">
+    <h2 class="reveal">You Don't Need Another Giant Productivity System</h2>
+    <p class="reveal">Most productivity advice gives people more things to do. UNSTUCK focuses on fewer things at once — less staring at the task, more knowing what to do next.</p>
+  </div>
+</section>
+ 
+<!-- HOW IT WORKS / POSITIONING -->
+<section class="instructor">
+  <div class="wrap">
+    <div class="eyebrow">What Makes It Different</div>
+    <h2 class="reveal">A Clear Next Step — Not Another Thing To Figure Out</h2>
+    <div class="instructor-grid">
+      <div class="instructor-photo reveal"><span class="big-q">"What is the smallest useful action I can realistically take right now?"</span></div>
+      <div class="instructor-copy reveal">
+        <h3>The simple promise</h3>
+        <span class="role">When You Don't Know Where To Start</span>
+        <p>Sometimes the hardest part isn't doing the work — it's figuring out where to start. UNSTUCK helps you turn overwhelming assignments, studying, job applications, and to-do lists into one clear next action, using the method: Understand → Prioritize → Break Down → One Action → DONE → Next Action.</p>
+        <ul class="credentials">
+          <li class="yes">Helps you break down overwhelming tasks</li>
+          <li class="yes">Helps you find a clear next action</li>
+          <li class="yes">Designed for students who struggle to get started</li>
+          <li class="no">Not therapy or mental-health treatment</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- WHO IT'S FOR -->
+<section class="audience">
+  <div class="wrap">
+    <div class="eyebrow">Is This You?</div>
+    <h2 class="reveal">Who UNSTUCK Is For</h2>
+    <div class="aud-grid">
+      <div class="aud-card reveal"><h4>Feeling Overwhelmed</h4><p>By schoolwork piling up faster than you can process it.</p></div>
+      <div class="aud-card reveal"><h4>Procrastinating</h4><p>Starting things later, and later, and later still.</p></div>
+      <div class="aud-card reveal"><h4>Not Knowing Where To Start</h4><p>Staring at a task with no clear entry point.</p></div>
+      <div class="aud-card reveal"><h4>Breaking Down Assignments</h4><p>Turning large, vague tasks into manageable steps.</p></div>
+      <div class="aud-card reveal"><h4>Confusing Instructions</h4><p>Understanding exactly what's being asked of you.</p></div>
+      <div class="aud-card reveal"><h4>Getting Started Studying</h4><p>Opening the notes instead of avoiding them.</p></div>
+      <div class="aud-card reveal"><h4>CVs & Job Applications</h4><p>Starting the document you keep putting off.</p></div>
+      <div class="aud-card reveal"><h4>Too Many Things At Once</h4><p>Turning a chaotic list into one clear priority.</p></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- WHAT YOU GET -->
+<section class="included">
+  <div class="wrap">
+    <div class="eyebrow">Everything Included</div>
+    <h2 class="reveal">Here's Everything You Get Today</h2>
+    <div class="inc-grid">
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">Quick-Start Guide</span></div>
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">UNSTUCK Master Prompt</span></div>
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">7 Ready-to-Use Prompts</span></div>
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">7-Day UNSTUCK Challenge</span></div>
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">Assignment & Exam Support Prompts</span></div>
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">CV / Job Application Support</span></div>
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">Procrastination & "I Can't Start" Prompts</span></div>
+      <div class="inc-item reveal"><span class="check">✓</span><span class="txt">Instant Digital Download</span></div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="eyebrow">Get Started</div>
+    <h2 class="reveal">One PDF. One Method. One Next Step.</h2>
+    <p style="max-width:600px;margin:20px auto 0;text-align:center;">A complete digital PDF + AI prompt system — no subscriptions, no giant course to work through, just the tools to get unstuck.</p>
+    <div class="price-card reveal">
+      <span class="slots">Digital PDF · Instant Download</span>
+      <div class="amount"><sup>$</sup>9</div>
+      <div class="amount-note">One payment · To start · No physical item shipped</div>
+      <ul>
+        <li>Quick-Start Guide</li>
+        <li>UNSTUCK Master Prompt</li>
+        <li>7 Prompt Library</li>
+        <li>7-Day UNSTUCK Challenge</li>
+      </ul>
+      <button type="button" class="btn" onclick="openPaymentModal()">Get UNSTUCK Now →</button>
+    </div>
+  </div>
+</section>
+ 
+<!-- FAQ -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Questions</div>
+    <h2 class="reveal">Frequently Asked Questions</h2>
+    <div class="faq-list">
+      <details class="reveal">
+        <summary>Do I need Claude to use this?</summary>
+        <p>Yes — UNSTUCK is used with Claude. You copy the Master Prompt or one of the 7 ready-to-use prompts into Claude and work through your task step by step.</p>
+      </details>
+      <details class="reveal">
+        <summary>Is this therapy or mental-health treatment?</summary>
+        <p>No. UNSTUCK is a productivity and task-organization tool. It's designed to help you break down overwhelming tasks and find a clear next action — it does not diagnose or treat conditions like ADHD, anxiety, or depression.</p>
+      </details>
+      <details class="reveal">
+        <summary>What if I don't understand my assignment?</summary>
+        <p>There's a dedicated "I Don't Understand" prompt in the library that helps you paste in your instructions and figure out exactly what's being asked before you try to complete it.</p>
+      </details>
+      <details class="reveal">
+        <summary>Will this help with exams and job applications too?</summary>
+        <p>Yes. The prompt library includes dedicated Exam Rescue and CV & Job Application prompts, alongside the general assignment and procrastination tools.</p>
+      </details>
+      <details class="reveal">
+        <summary>What format do I receive it in?</summary>
+        <p>UNSTUCK is delivered as a single digital PDF containing the Quick-Start Guide, Master Prompt, 7 Prompt Library, and 7-Day Challenge. It's an instant download — no physical item is shipped.</p>
+      </details>
+    </div>
+  </div>
+</section>
+ 
+<!-- FINAL CTA -->
+<section class="final">
+  <div class="wrap">
+    <h2 class="reveal">When You Don't Know Where To Start, UNSTUCK Helps You Find The Next Step.</h2>
+    <div class="cta-row reveal">
+      <button type="button" class="btn" onclick="openPaymentModal()">Get UNSTUCK Now →</button>
+    </div>
+    <div class="micro" style="margin-top:20px;">Less staring at the task. More knowing what to do next.</div>
+  </div>
+</section>
+ 
+<footer>
+  <div class="wrap">© <span id="year"></span> UNSTUCK — Student Edition. All rights reserved.</div>
+</footer>
+ 
+<div class="sticky-cta">
+  <span class="price">$9 · Instant Download</span>
+  <button type="button" class="btn" onclick="openPaymentModal()">Get UNSTUCK</button>
+</div>
+ 
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+ 
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+ 
+  // ---------- Paystack payment ----------
+  const PAYSTACK_PUBLIC_KEY = 'pk_test_050d5db88f5d667825a2ef62519f1cfd81eab21f';
+  const AMOUNT_NGN = 20000;
+  const REDIRECT_URL = 'thanks.html.html';
+ 
+  function openPaymentModal(){
+    document.getElementById('payOverlay').classList.add('open');
+    document.getElementById('payEmail').focus();
+  }
+  function closePaymentModal(){
+    document.getElementById('payOverlay').classList.remove('open');
+    document.getElementById('payError').classList.remove('show');
+  }
+  document.getElementById('payOverlay').addEventListener('click', function(e){
+    if(e.target === this) closePaymentModal();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closePaymentModal();
+  });
+ 
+  function isValidEmail(email){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+ 
+  function payWithPaystack(){
+    const emailInput = document.getElementById('payEmail');
+    const nameInput = document.getElementById('payName');
+    const errorEl = document.getElementById('payError');
+    const email = emailInput.value.trim();
+ 
+    if(!isValidEmail(email)){
+      errorEl.textContent = 'Please enter a valid email address.';
+      errorEl.classList.add('show');
+      emailInput.focus();
+      return;
+    }
+    errorEl.classList.remove('show');
+ 
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email: email,
+      amount: AMOUNT_NGN * 100, // kobo
+      currency: 'NGN',
+      ref: 'UNSTUCK-' + Date.now() + '-' + Math.floor(Math.random()*100000),
+      metadata: {
+        custom_fields: [
+          { display_name: "Full Name", variable_name: "full_name", value: nameInput.value.trim() || "Not provided" },
+          { display_name: "Product", variable_name: "product", value: "UNSTUCK — Student Edition" }
+        ]
+      },
+      callback: function(response){
+        window.location.href = REDIRECT_URL;
+      },
+      onClose: function(){
+        // user closed the Paystack popup without paying
+      }
+    });
+    handler.openIframe();
+  }
+</script>
+ 
+<!-- Paystack Inline -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+ 
+<!-- Payment Modal -->
+<div class="pay-overlay" id="payOverlay">
+  <div class="pay-modal">
+    <button type="button" class="pay-close" onclick="closePaymentModal()" aria-label="Close">✕</button>
+    <h3>Get UNSTUCK</h3>
+    <div class="sub">Enter your details to continue to secure payment via Paystack.</div>
+ 
+    <div class="pay-field">
+      <label for="payName">Full Name</label>
+      <input type="text" id="payName" placeholder="Your full name">
+    </div>
+    <div class="pay-field">
+      <label for="payEmail">Email Address</label>
+      <input type="email" id="payEmail" placeholder="you@example.com" required>
+    </div>
+    <div class="pay-error" id="payError">Please enter a valid email address.</div>
+ 
+    <div class="pay-amount-row">
+      <span class="label">Amount</span>
+      <span class="amt">₦20,000</span>
+    </div>
+ 
+    <button type="button" class="btn" onclick="payWithPaystack()">Pay ₦20,000 Now →</button>
+  </div>
+</div>
+ 
+</body>
+</html>
+ 
